@@ -1,0 +1,67 @@
+import asyncio
+import logging
+import os
+from datetime import datetime
+
+from agent_framework import Agent, MCPStreamableHTTPTool
+from agent_framework.openai import OpenAIChatClient
+from azure.identity.aio import DefaultAzureCredential, get_bearer_token_provider
+from dotenv import load_dotenv
+from rich import print
+from rich.logging import RichHandler
+
+# Setup logging
+handler = RichHandler(show_path=False, rich_tracebacks=True, show_level=False)
+logging.basicConfig(level=logging.WARNING, handlers=[handler], force=True, format="%(message)s")
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Configure OpenAI client based on environment
+load_dotenv(override=True)
+API_HOST = os.getenv("API_HOST", "azure")
+MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://localhost:8000/mcp")
+
+async_credential = None
+if API_HOST == "azure":
+    async_credential = DefaultAzureCredential()
+    token_provider = get_bearer_token_provider(async_credential, "https://cognitiveservices.azure.com/.default")
+    client = OpenAIChatClient(
+        base_url=f"{os.environ['AZURE_OPENAI_ENDPOINT']}/openai/v1/",
+        api_key=token_provider,
+        model=os.environ["AZURE_OPENAI_CHAT_DEPLOYMENT"],
+    )
+elif API_HOST == "ollama":
+    client = OpenAIChatClient(
+        base_url=os.environ.get("OLLAMA_ENDPOINT", "http://localhost:11434/v1"),
+        api_key=os.environ.get("OLLAMA_API_KEY", "nokeyneeded"),
+        model=os.environ.get("OLLAMA_MODEL", "qwen3.5:4b"),
+    )
+else:
+    client = OpenAIChatClient(
+        api_key=os.environ["OPENAI_API_KEY"],
+        model=os.environ.get("OPENAI_MODEL", "gpt-5.4"),
+    )
+
+
+async def main() -> None:
+    """Run an agent connected to a local MCP server for expense logging."""
+    async with (
+        MCPStreamableHTTPTool(name="Expenses MCP Server", url=MCP_SERVER_URL) as mcp_server,
+        Agent(
+            client=client,
+            instructions=(
+                "You help users with tasks using the available tools. "
+                f"Today's date is {datetime.now().strftime('%Y-%m-%d')}."
+            ),
+            tools=[mcp_server],
+        ) as agent,
+    ):
+        response = await agent.run("yesterday I bought a laptop for $1200 using my visa, log this expense")
+        print(response.text)
+
+    if async_credential:
+        await async_credential.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

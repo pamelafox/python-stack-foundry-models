@@ -1,0 +1,29 @@
+[project]
+name = "python-stack-foundry-models"
+version = "0.1.0"
+description = "Collection of Python examples for AIE talk on picking a stack"
+requires-python = ">=3.10"
+dependencies = [
+    "azure-identity",
+    "openai>=1.109.1",
+    "python-dotenv",
+    "pydantic",
+    "rich",
+    "dotenv-azd",
+    "aiohttp",
+    "opentelemetry-exporter-otlp-proto-grpc",
+    "azure-monitor-opentelemetry",
+    "agent-framework-core==1.0.0",
+    "agent-framework-openai==1.0.0",
+    "agent-framework-devui==1.0.0b260402",
+    "agent-framework-orchestrations==1.0.0b260402",
+]
+
+[tool.uv]
+prerelease = "allow"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+lint.select = ["E", "F", "I", "UP"]
+lint.ignore = ["D203"]
