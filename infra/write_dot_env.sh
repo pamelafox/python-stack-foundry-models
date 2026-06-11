@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# Clear the contents of the .env file
-> .env
+set -euo pipefail
 
-# Append new values to the .env file
-echo "API_HOST=azure" >> .env
-echo "AZURE_TENANT_ID=$(azd env get-value AZURE_TENANT_ID)" >> .env
-echo "AZURE_OPENAI_ENDPOINT=$(azd env get-value AZURE_OPENAI_ENDPOINT)" >> .env
-echo "AZURE_OPENAI_VERSION=2024-10-21" >> .env
-echo "AZURE_OPENAI_CHAT_DEPLOYMENT=$(azd env get-value AZURE_OPENAI_CHAT_DEPLOYMENT)" >> .env
-echo "AZURE_OPENAI_CHAT_MODEL=$(azd env get-value AZURE_OPENAI_CHAT_MODEL)" >> .env
-echo "AZURE_OPENAI_EMBEDDING_DEPLOYMENT=$(azd env get-value AZURE_OPENAI_EMBEDDING_DEPLOYMENT)" >> .env
-echo "AZURE_OPENAI_EMBEDDING_MODEL=$(azd env get-value AZURE_OPENAI_EMBEDDING_MODEL)" >> .env
-echo "APPLICATIONINSIGHTS_CONNECTION_STRING=$(azd env get-value APPLICATIONINSIGHTS_CONNECTION_STRING)" >> .env
+azure_tenant_id="$(azd env get-value AZURE_TENANT_ID)"
+foundry_models_endpoint="$(azd env get-value FOUNDRY_MODELS_ENDPOINT)"
+foundry_openai_deployment="$(azd env get-value FOUNDRY_OPENAI_DEPLOYMENT)"
+foundry_claude_deployment="$(azd env get-value FOUNDRY_CLAUDE_DEPLOYMENT)"
+
+{
+	echo "AZURE_TENANT_ID=$azure_tenant_id"
+	echo
+	echo "FOUNDRY_MODELS_ENDPOINT=$foundry_models_endpoint"
+	echo "FOUNDRY_OPENAI_DEPLOYMENT=$foundry_openai_deployment"
+	echo "FOUNDRY_CLAUDE_DEPLOYMENT=$foundry_claude_deployment"
+} > .env

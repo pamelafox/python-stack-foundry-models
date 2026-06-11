@@ -1,75 +1,22 @@
 targetScope = 'subscription'
 
-type OpenAiDeployment = {
-  deploymentName: string
-  modelName: string
-  modelVersion: string
-  capacity: int
-  format: string?
-  skuName: string?
-}
-
-type ClaudeModelDeployment = {
-  name: string
-  capacity: int
-  version: string?
-}
-
 @minLength(1)
 @maxLength(64)
 @description('Name of the the environment which is used to generate a short unique hash used in all resources.')
 param environmentName string
-
-@minLength(1)
-@description('Location for the OpenAI resource')
-// Regions must support both the model AND the Responses API:
-// Models by region: https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/models-sold-directly-by-azure?tabs=global-standard-aoai%2Cglobal-standard&pivots=azure-openai#models-by-deployment-type
-// Responses API regions: https://learn.microsoft.com/azure/foundry/openai/how-to/responses?tabs=python-key#region-availability
+@description('Azure region. All three families coexist in eastus2 or swedencentral.')
 @allowed([
-  'australiaeast'
-  'brazilsouth'
-  'canadacentral'
-  'canadaeast'
-  'eastus'
   'eastus2'
-  'francecentral'
-  'germanywestcentral'
-  'italynorth'
-  'japaneast'
-  'koreacentral'
-  'northcentralus'
-  'norwayeast'
-  'polandcentral'
-  'southafricanorth'
-  'southcentralus'
-  'southeastasia'
-  'southindia'
-  'spaincentral'
   'swedencentral'
-  'switzerlandnorth'
-  'uaenorth'
-  'uksouth'
-  'westus'
-  'westus3'
+  'westus2'
 ])
-@metadata({
-  azd: {
-    type: 'location'
-  }
-})
 param location string
-
-@description('List of OpenAI deployments to create in the OpenAI account.')
-param azureOpenaiModels OpenAiDeployment[]
 
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
 
 @description('Whether to assign Foundry roles to principalId.')
-param assignRbac bool = false
-
-@description('List of Claude model deployments to create in Foundry.')
-param claudeModels ClaudeModelDeployment[]
+param assignRbac bool = true
 
 @description('Organization name surfaced via Claude modelProviderData.')
 param claudeOrganizationName string
@@ -96,10 +43,10 @@ param claudeIndustry string = 'technology'
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var prefix = '${environmentName}${resourceToken}'
 var tags = { 'azd-env-name': environmentName }
-var baseName = 'claude'
-var foundrySuffix = take(uniqueString(subscription().id, environmentName), 8)
-var foundryAccountName = '${baseName}-foundry-${foundrySuffix}'
-var foundryProjectName = '${baseName}-proj-${foundrySuffix}'
+var foundryAccountName = '${prefix}-foundry'
+var foundryProjectName = '${prefix}-proj'
+var openAiDeploymentName = 'gpt-5.4-mini'
+var claudeDeploymentName = 'claude-sonnet-4-5'
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -116,9 +63,23 @@ module foundry 'foundry.bicep' = {
     tags: tags
     accountName: foundryAccountName
     projectName: foundryProjectName
-    suffix: foundrySuffix
-    openAiModels: azureOpenaiModels
-    claudeModels: claudeModels
+    openAiModels: [
+      {
+        deploymentName: openAiDeploymentName
+        modelName: 'gpt-5.4-mini'
+        modelVersion: '2026-03-17'
+        capacity: 50
+        format: 'OpenAI'
+        skuName: 'GlobalStandard'
+      }
+    ]
+    claudeModels: [
+      {
+        name: claudeDeploymentName
+        capacity: 50
+        version: '20250929'
+      }
+    ]
     claudeOrganizationName: claudeOrganizationName
     claudeCountryCode: claudeCountryCode
     claudeIndustry: claudeIndustry
@@ -158,15 +119,16 @@ output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
-// Specific to Azure OpenAI
-output AZURE_OPENAI_ENDPOINT string = foundry.outputs.openAiEndpoint
-output AZURE_OPENAI_DEPLOYMENT_NAMES array = foundry.outputs.openAiDeploymentNames
-
 // Specific to Application Insights
 output APPLICATIONINSIGHTS_CONNECTION_STRING string = appInsights.outputs.connectionString
 
-// Specific to Microsoft Foundry + Claude
-output CLAUDE_BASE_URL string = foundry.outputs.claudeBaseUrl
+// Specific to Microsoft Foundry
 output FOUNDRY_PROJECT_ENDPOINT string = foundry.outputs.foundryProjectEndpoint
 output FOUNDRY_ACCOUNT_NAME string = foundry.outputs.foundryAccountName
+
+// Specific to model deployments
+output FOUNDRY_MODELS_ENDPOINT string = foundry.outputs.modelsEndpoint
+output FOUNDRY_OPENAI_DEPLOYMENT string = openAiDeploymentName
+output FOUNDRY_OPENAI_DEPLOYMENT_NAMES array = foundry.outputs.openAiDeploymentNames
+output FOUNDRY_CLAUDE_DEPLOYMENT string = claudeDeploymentName
 output CLAUDE_DEPLOYMENT_NAMES array = foundry.outputs.claudeDeploymentNames

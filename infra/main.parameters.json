@@ -11,27 +11,6 @@
     "principalId": {
       "value": "${AZURE_PRINCIPAL_ID}"
     },
-    "azureOpenaiModels": {
-      "value": [
-        {
-          "deploymentName": "${AZURE_OPENAI_CHAT_DEPLOYMENT}",
-          "modelName": "${AZURE_OPENAI_CHAT_MODEL}",
-          "modelVersion": "${AZURE_OPENAI_CHAT_MODEL_VERSION}",
-          "capacity": "${AZURE_OPENAI_CHAT_DEPLOYMENT_CAPACITY}",
-          "format": "OpenAI",
-          "skuName": "GlobalStandard"
-        }
-      ]
-    },
-    "claudeModels": {
-      "value": [
-        {
-          "name": "${CLAUDE_SONNET_MODEL}",
-          "capacity": "${CLAUDE_SONNET_CAPACITY}",
-          "version": "${CLAUDE_MODEL_VERSION}"
-        }
-      ]
-    },
     "claudeOrganizationName": {
       "value": "${CLAUDE_ORGANIZATION_NAME}"
     }

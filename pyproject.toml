@@ -5,6 +5,8 @@ description = "Collection of Python examples for AIE talk on picking a stack"
 requires-python = ">=3.10"
 dependencies = [
     "azure-identity",
+    "anthropic",
+    "litellm",
     "openai>=1.109.1",
     "python-dotenv",
     "pydantic",

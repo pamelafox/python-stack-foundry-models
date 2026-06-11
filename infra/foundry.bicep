@@ -19,7 +19,6 @@ param location string
 param tags object
 param accountName string
 param projectName string
-param suffix string
 
 param openAiModels OpenAiDeployment[]
 param claudeModels ClaudeModelDeployment[]
@@ -41,11 +40,10 @@ param claudeCountryCode string
 ])
 param claudeIndustry string
 param principalId string
-param assignRbac bool = false
+param assignRbac bool = true
 
 var defaultClaudeModelVersion = '1'
 var rbacEnabled = assignRbac && !empty(principalId)
-var nameSuffix = take(suffix, 6)
 var effectiveOpenAiModels = [for model in openAiModels: {
   deploymentName: model.deploymentName
   modelName: model.modelName
@@ -59,8 +57,8 @@ var effectiveClaudeModels = [for model in claudeModels: {
   capacity: model.capacity
   version: model.?version ?? defaultClaudeModelVersion
 }]
-var openAiDeploymentNames = [for model in effectiveOpenAiModels: '${model.deploymentName}-${nameSuffix}']
-var deploymentNames = [for model in effectiveClaudeModels: '${model.name}-${nameSuffix}']
+var openAiDeploymentNames = [for model in effectiveOpenAiModels: model.deploymentName]
+var deploymentNames = [for model in effectiveClaudeModels: model.name]
 
 // Built-in role definition IDs.
 // NOTE: Azure renamed these roles. The GUIDs are stable.
@@ -102,7 +100,7 @@ resource project 'Microsoft.CognitiveServices/accounts/projects@2025-10-01-previ
 @batchSize(1)
 resource openAiDeployments 'Microsoft.CognitiveServices/accounts/deployments@2025-10-01-preview' = [for model in effectiveOpenAiModels: {
   parent: account
-  name: '${model.deploymentName}-${nameSuffix}'
+  name: model.deploymentName
   sku: {
     name: model.skuName
     capacity: model.capacity
@@ -124,7 +122,7 @@ resource openAiDeployments 'Microsoft.CognitiveServices/accounts/deployments@202
 @batchSize(1)
 resource claudeDeployments 'Microsoft.CognitiveServices/accounts/deployments@2025-10-01-preview' = [for model in effectiveClaudeModels: {
   parent: account
-  name: '${model.name}-${nameSuffix}'
+  name: model.name
   sku: {
     name: 'GlobalStandard'
     capacity: model.capacity
@@ -144,7 +142,7 @@ resource claudeDeployments 'Microsoft.CognitiveServices/accounts/deployments@202
     raiPolicyName: 'Microsoft.DefaultV2'
   }
   dependsOn: [
-    project
+    openAiDeployments
   ]
 }]
 
@@ -168,8 +166,7 @@ resource foundryProjectManagerAssignment 'Microsoft.Authorization/roleAssignment
   }
 }
 
-output claudeBaseUrl string = 'https://${account.name}.services.ai.azure.com/anthropic'
-output openAiEndpoint string = 'https://${account.name}.services.ai.azure.com'
+output modelsEndpoint string = 'https://${account.name}.services.ai.azure.com'
 output foundryProjectEndpoint string = 'https://${account.name}.services.ai.azure.com/api/projects/${project.name}'
 output foundryAccountName string = account.name
 output openAiDeploymentNames array = openAiDeploymentNames
