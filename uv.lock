@@ -18,6 +18,19 @@ resolution-markers = [
 prerelease-mode = "allow"
 
 [[package]]
+name = "agent-framework-anthropic"
+version = "1.0.0b260402"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "agent-framework-core" },
+    { name = "anthropic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4f/5a/2ad69ceeffdf0e8a69b4586b0175754bbdb5ffaa8c1cc6423a069b2d8b6a/agent_framework_anthropic-1.0.0b260402.tar.gz", hash = "sha256:5e267ba7c3df265b604219a14e758408cf1fede9b092d56bc01db348873cb095", size = 18362, upload-time = "2026-04-02T16:38:54.842Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ca/d4/085143021a42452421c8a68c7d26d7bbbca029073d07b5deb2e0f071138c/agent_framework_anthropic-1.0.0b260402-py3-none-any.whl", hash = "sha256:fdf39f6867da00cdcc5abda6064e4c1f6853a37864da50ba7683bb245f4f4683", size = 21090, upload-time = "2026-04-02T16:39:39.888Z" },
+]
+
+[[package]]
 name = "agent-framework-core"
 version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -235,7 +248,7 @@ wheels = [
 
 [[package]]
 name = "anthropic"
-version = "0.109.1"
+version = "0.80.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
@@ -247,9 +260,9 @@ dependencies = [
     { name = "sniffio" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/54/0b/ce24a4f275573f5e436ca954faca60c759d58ed152b8fa36a1e3b888e261/anthropic-0.109.1.tar.gz", hash = "sha256:83e06b3d9d40ff5898f588020e0cc4e42187de954549a3b5fbe6e2685a09c785", size = 927569, upload-time = "2026-06-09T23:55:24.884Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/63/791e14ef5a8ecb485cef5b5d058c7ca3ad6c50a2f94cf4cea5231c6b7c16/anthropic-0.80.0.tar.gz", hash = "sha256:ef042586673fdcab2a6ffd381aa5f9a1bcce38ffe73c07fe70bd56d12b8124ba", size = 533291, upload-time = "2026-02-17T19:26:26.717Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/0f/a6110d713370bc92f074a622f8a5ebdec7e92360149b1048dca258a07b2f/anthropic-0.109.1-py3-none-any.whl", hash = "sha256:ce7d94a7657f2aa29338cca448945eac621b4f62c1794cf461cb32847223e9b8", size = 923851, upload-time = "2026-06-09T23:55:23.348Z" },
+    { url = "https://files.pythonhosted.org/packages/b2/4b/665f29338f51d0c2f9e04b276ea54cc1e957ae5c521a0ad868aa80abc608/anthropic-0.80.0-py3-none-any.whl", hash = "sha256:dad0e40ec371ee686e9ffb2e0cb461a0ed51447fa100927fb5d39b174c286d6f", size = 453667, upload-time = "2026-02-17T19:26:29.96Z" },
 ]
 
 [[package]]
@@ -2217,6 +2230,7 @@ name = "python-stack-foundry-models"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "agent-framework-anthropic" },
     { name = "agent-framework-core" },
     { name = "agent-framework-devui" },
     { name = "agent-framework-openai" },
@@ -2236,6 +2250,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "agent-framework-anthropic", specifier = ">=1.0.0b260402" },
     { name = "agent-framework-core", specifier = "==1.0.0" },
     { name = "agent-framework-devui", specifier = "==1.0.0b260402" },
     { name = "agent-framework-openai", specifier = "==1.0.0" },

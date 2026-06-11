@@ -19,6 +19,7 @@ dependencies = [
     "agent-framework-openai==1.0.0",
     "agent-framework-devui==1.0.0b260402",
     "agent-framework-orchestrations==1.0.0b260402",
+    "agent-framework-anthropic>=1.0.0b260402",
 ]
 
 [tool.uv]
