@@ -21,6 +21,9 @@ dependencies = [
     "agent-framework-devui==1.0.0b260402",
     "agent-framework-orchestrations==1.0.0b260402",
     "agent-framework-anthropic>=1.0.0b260402",
+    "langchain",
+    "langchain-anthropic",
+    "langchain-azure-ai",
 ]
 
 [tool.uv]

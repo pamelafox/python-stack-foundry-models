@@ -125,6 +125,7 @@ You can run the examples in this repository by executing the scripts in the `exa
 | [anthropic_messages.py](examples/anthropic_messages.py) | Calling a Foundry-hosted Claude model using the Anthropic Python SDK (Messages API). |
 | [litellm_swap.py](examples/litellm_swap.py) | Calling either OpenAI or Claude models via LiteLLM, a unified interface that abstracts provider differences. |
 | [pydanticai_agent.py](examples/pydanticai_agent.py) | Building an agent with tools using PydanticAI, configured for either OpenAI or Claude on Foundry. |
+| [langchain_agent.py](examples/langchain_agent.py) | Building an agent with tools using LangChain, configured for either OpenAI or Claude on Foundry. |
 | [agentframework_agent.py](examples/agentframework_agent.py) | Building an agent with tools using Microsoft Agent Framework, configured for either OpenAI or Claude on Foundry. |
 
 Run any example with:
@@ -141,3 +142,5 @@ uv run examples/<example_name>.py
 * [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python)
 * [LiteLLM](https://github.com/BerriAI/litellm)
 * [PydanticAI](https://ai.pydantic.dev/)
+* [LangChain](https://python.langchain.com/)
+* [langchain-azure-ai](https://github.com/langchain-ai/langchain-azure)

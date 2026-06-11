@@ -1,6 +1,6 @@
 # Instructions for coding agents
 
-This repository contains samples showing different Python stacks (OpenAI SDK, Anthropic SDK, LiteLLM, PydanticAI, Microsoft Agent Framework) for building on top of multiple Microsoft Foundry models (OpenAI, Claude, etc).
+This repository contains samples showing different Python stacks (OpenAI SDK, Anthropic SDK, LiteLLM, PydanticAI, LangChain, Microsoft Agent Framework) for building on top of multiple Microsoft Foundry models (OpenAI, Claude, etc).
 
 All examples authenticate to Foundry using `AzureDeveloperCliCredential` and reference environment variables from a `.env` file (produced by `azd provision`).
 
@@ -9,6 +9,7 @@ Key SDKs/frameworks used:
 - **Anthropic Python SDK** (`anthropic`): For calling Foundry-hosted Claude models via the Messages API.
 - **LiteLLM** (`litellm`): A unified interface that abstracts provider differences.
 - **PydanticAI** (`pydantic-ai`): Agent framework with typed tool support, works with OpenAI or Anthropic providers.
+- **LangChain** (`langchain`, `langchain-anthropic`, `langchain-azure-ai`): Agent framework using `ChatAnthropic` for Claude via Messages API and `AzureAIOpenAIApiChatModel` for OpenAI via Responses API.
 - **Microsoft Agent Framework** (`agent-framework-*`): Microsoft's agent framework, supporting OpenAI and Anthropic clients.
 
 The Microsoft Agent Framework (MAF) GitHub repo is here:
