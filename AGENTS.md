@@ -1,18 +1,21 @@
 # Instructions for coding agents
 
-This repository contains many examples of using the Microsoft Agent Framework in Python (agent-framework), sometimes abbreviated as MAF.
+This repository contains samples showing different Python stacks (OpenAI SDK, Anthropic SDK, LiteLLM, PydanticAI, Microsoft Agent Framework) for building on top of multiple Microsoft Foundry models (OpenAI, Claude, etc).
 
-The agent-framework GitHub repo is here:
+All examples authenticate to Foundry using `AzureDeveloperCliCredential` and reference environment variables from a `.env` file (produced by `azd provision`).
+
+Key SDKs/frameworks used:
+- **OpenAI Python SDK** (`openai`): For calling Foundry-hosted OpenAI models via the Responses API.
+- **Anthropic Python SDK** (`anthropic`): For calling Foundry-hosted Claude models via the Messages API.
+- **LiteLLM** (`litellm`): A unified interface that abstracts provider differences.
+- **PydanticAI** (`pydantic-ai`): Agent framework with typed tool support, works with OpenAI or Anthropic providers.
+- **Microsoft Agent Framework** (`agent-framework-*`): Microsoft's agent framework, supporting OpenAI and Anthropic clients.
+
+The Microsoft Agent Framework (MAF) GitHub repo is here:
 https://github.com/microsoft/agent-framework
-It contains both Python and .NET agent framework code, but we are only using the Python packages in this repo.
-
-MAF is changing rapidly still, so we sometimes need to check the repo changelog and issues to see if there are any breaking changes that might affect our code.
 The Python changelog is here:
 https://github.com/microsoft/agent-framework/blob/main/python/CHANGELOG.md
-
-MAF documentation is available on Microsoft Learn here:
-https://learn.microsoft.com/agent-framework/
-When available, the MS Learn MCP server can be used to explore the documentation, ask questions, and get code examples.
+MAF documentation: https://learn.microsoft.com/agent-framework/
 
 ## Package management
 
