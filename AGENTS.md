@@ -18,6 +18,15 @@ The Python changelog is here:
 https://github.com/microsoft/agent-framework/blob/main/python/CHANGELOG.md
 MAF documentation: https://learn.microsoft.com/agent-framework/
 
+## Open issues affecting these samples
+
+- Anthropic SDK bearer-token callable support: https://github.com/anthropics/anthropic-sdk-python/issues/1496#issuecomment-4685322526
+    This affects Foundry auth ergonomics for Anthropic-based samples because the SDK currently expects a sync `AccessTokenProvider` instead of a simpler bearer-token callback shape.
+- LangChain Azure Anthropic Messages API support: https://github.com/langchain-ai/langchain-azure/issues/673
+    This affects whether Claude via Foundry can be handled through `langchain-azure-ai` instead of mixing `langchain-anthropic` with Foundry-specific configuration.
+- MAF Anthropic workflow assistant-message compatibility fix: https://github.com/microsoft/agent-framework/pull/6207
+    This affects multi-agent workflow chaining with Anthropic, where assistant-role messages may need re-roling to user until the upstream fix is available in a released version.
+
 ## Package management
 
 This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Use `uv` commands instead of `pip`:
@@ -26,6 +35,16 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management. Us
 uv add <package>
 uv sync
 ```
+
+## Manual test plan
+
+Run the repo-root test script:
+
+```bash
+./manual_test.sh
+```
+
+Keep `manual_test.sh` up to date whenever you add a new sample or add support for another model path in an existing sample.
 
 ## Debugging Azure Python SDK HTTP requests
 

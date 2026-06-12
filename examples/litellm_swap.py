@@ -16,7 +16,7 @@ azure_token_provider = get_bearer_token_provider(
     "https://ai.azure.com/.default",
 )
 
-provider = "openai"
+provider = os.environ.get("MODEL_CHOICE", "openai")
 if provider == "openai":
     model = f"azure/responses/{os.environ['FOUNDRY_OPENAI_DEPLOYMENT']}"
     api_base = os.environ["FOUNDRY_MODELS_ENDPOINT"]

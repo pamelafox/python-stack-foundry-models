@@ -3,8 +3,11 @@ import os
 import random
 from datetime import datetime
 
-from anthropic import AsyncAnthropicFoundry
-from azure.identity.aio import AzureDeveloperCliCredential, get_bearer_token_provider
+from anthropic import AsyncAnthropic
+from anthropic.lib.credentials import AccessToken
+from azure.identity import AzureDeveloperCliCredential as SyncAzureDeveloperCliCredential
+from azure.identity.aio import AzureDeveloperCliCredential as AsyncAzureDeveloperCliCredential
+from azure.identity.aio import get_bearer_token_provider
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from pydantic_ai import Agent
@@ -15,29 +18,37 @@ from pydantic_ai.providers.anthropic import AnthropicProvider
 
 load_dotenv(override=True)
 
-azure_credential = AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
+provider = os.environ.get("MODEL_CHOICE", "openai")
 
-provider = "openai"
 if provider == "openai":
-    token_provider = get_bearer_token_provider(azure_credential, "https://ai.azure.com/.default")
+    async_azure_credential = AsyncAzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
+    token_provider = get_bearer_token_provider(async_azure_credential, "https://ai.azure.com/.default")
     client = AsyncOpenAI(
         base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
         api_key=token_provider,
     )
-    model = OpenAIChatModel(
-        os.environ["FOUNDRY_OPENAI_DEPLOYMENT"],
-        provider=OpenAIProvider(openai_client=client),
-    )
+    model = OpenAIChatModel(os.environ["FOUNDRY_OPENAI_DEPLOYMENT"], provider=OpenAIProvider(openai_client=client))
+
 elif provider == "claude":
-    token_provider = get_bearer_token_provider(azure_credential, "https://ai.azure.com/.default")
-    foundry_client = AsyncAnthropicFoundry(
+    sync_azure_credential = SyncAzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
+
+    def anthropic_credentials_provider():
+        def _provider(*, force_refresh: bool = False) -> AccessToken:
+            token = sync_azure_credential.get_token("https://ai.azure.com/.default")
+            return AccessToken(token=token.token, expires_at=token.expires_on)
+        return _provider
+
+    foundry_client = AsyncAnthropic(
+        credentials=anthropic_credentials_provider(),
         base_url=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/anthropic",
-        azure_ad_token_provider=token_provider,
     )
     model = AnthropicModel(
         os.environ["FOUNDRY_CLAUDE_DEPLOYMENT"],
         provider=AnthropicProvider(anthropic_client=foundry_client),
     )
+else:
+    raise ValueError(f"Unsupported MODEL_CHOICE: {provider}")
+
 
 def get_weather(city: str) -> dict:
     """Returns weather data for a given city, a dictionary with temperature and description."""
@@ -57,6 +68,7 @@ def get_activities(city: str, date: str) -> list:
 def get_current_date() -> str:
     """Gets the current date from the system and returns as a string in format YYYY-MM-DD."""
     return datetime.now().strftime("%Y-%m-%d")
+
 
 agent = Agent(
     model,

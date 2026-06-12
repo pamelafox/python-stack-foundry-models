@@ -13,7 +13,7 @@ load_dotenv(override=True)
 
 azure_credential = AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
 
-provider = "openai"
+provider = os.environ.get("MODEL_CHOICE", "openai")
 if provider == "openai":
     model = AzureAIOpenAIApiChatModel(
         endpoint=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
