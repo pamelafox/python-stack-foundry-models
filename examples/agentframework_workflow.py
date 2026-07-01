@@ -4,8 +4,8 @@ import sys
 from typing import Any
 
 from agent_framework import AgentExecutor, AgentExecutorResponse, Message, WorkflowBuilder
-from agent_framework_openai import OpenAIChatClient
 from agent_framework.anthropic import AnthropicClient
+from agent_framework_openai import OpenAIChatClient
 from anthropic import AsyncAnthropic
 from anthropic.lib.credentials import AccessToken
 from azure.identity import AzureDeveloperCliCredential

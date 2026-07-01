@@ -13,15 +13,15 @@ load_dotenv(override=True)
 
 azure_credential = AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
 
-provider = os.environ.get("MODEL_CHOICE", "openai")
-if provider == "openai":
+model_choice = os.environ.get("MODEL_CHOICE", "openai")
+if model_choice == "openai":
     model = AzureAIOpenAIApiChatModel(
         endpoint=os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
         credential=azure_credential,
         model=os.environ["FOUNDRY_OPENAI_DEPLOYMENT"],
         use_responses_api=True,
     )
-elif provider == "claude":
+elif model_choice == "claude":
     token_provider = get_bearer_token_provider(azure_credential, "https://ai.azure.com/.default")
     # Warning: token_provider() returns a token valid for ~1 hour.
     # For long-running services, call token_provider() again before each agent run.
@@ -74,6 +74,7 @@ def main():
         {"messages": [{"role": "user", "content": "what can I do this weekend in San Francisco?"}]}
     )
     latest_message = response["messages"][-1]
+    print(f"Response from {model.model}:\n")
     print(latest_message.content)
 
 

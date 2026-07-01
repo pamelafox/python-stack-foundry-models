@@ -16,15 +16,16 @@ azure_token_provider = get_bearer_token_provider(
     "https://ai.azure.com/.default",
 )
 
-provider = os.environ.get("MODEL_CHOICE", "openai")
-if provider == "openai":
+model_choice = os.environ.get("MODEL_CHOICE", "openai")
+if model_choice == "openai":
     model = f"azure/responses/{os.environ['FOUNDRY_OPENAI_DEPLOYMENT']}"
     api_base = os.environ["FOUNDRY_MODELS_ENDPOINT"]
     kwargs = {}
-elif provider == "claude":
+elif model_choice == "claude":
     model = f"azure_ai/{os.environ['FOUNDRY_CLAUDE_DEPLOYMENT']}"
     api_base = os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/anthropic"
     kwargs = {"thinking": {"type": "enabled", "budget_tokens": 1024}}
+
 
 response = completion(
     model=model,
@@ -34,4 +35,5 @@ response = completion(
     **kwargs,
 )
 
+print(f"Response from {model}:\n")
 print(response.choices[0].message.content)

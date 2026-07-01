@@ -1,8 +1,9 @@
 import os
 
-from openai import OpenAI
 from azure.identity import AzureDeveloperCliCredential, get_bearer_token_provider
 from dotenv import load_dotenv
+from openai import OpenAI
+from rich import print
 
 load_dotenv(override=True)
 
@@ -21,4 +22,4 @@ response = client.responses.create(
     input="What is the capital of France?",
 )
 
-print(response.output[0])
+print(response)

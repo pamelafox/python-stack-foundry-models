@@ -1,0 +1,14 @@
+### OpenAI Responses API via Microsoft Foundry
+
+@endpoint = {{$dotenv FOUNDRY_MODELS_ENDPOINT}}
+@deployment = {{$dotenv FOUNDRY_OPENAI_DEPLOYMENT}}
+@token = {{$dotenv TOKEN}}
+
+POST {{endpoint}}openai/v1/responses
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "model": "{{deployment}}",
+  "input": "What is the capital of France?"
+}

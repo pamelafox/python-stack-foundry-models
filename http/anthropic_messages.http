@@ -1,0 +1,21 @@
+### Anthropic Messages API via Microsoft Foundry
+
+@endpoint = {{$dotenv FOUNDRY_MODELS_ENDPOINT}}
+@deployment = {{$dotenv FOUNDRY_CLAUDE_DEPLOYMENT}}
+@token = {{$dotenv TOKEN}}
+
+POST {{endpoint}}anthropic/v1/messages
+Content-Type: application/json
+Authorization: Bearer {{token}}
+anthropic-version: 2023-06-01
+
+{
+  "model": "{{deployment}}",
+  "max_tokens": 1024,
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ]
+}

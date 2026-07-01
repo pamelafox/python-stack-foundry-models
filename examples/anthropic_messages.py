@@ -4,6 +4,7 @@ from anthropic import Anthropic
 from anthropic.lib.credentials import AccessToken
 from azure.identity import AzureDeveloperCliCredential
 from dotenv import load_dotenv
+from rich import print
 
 load_dotenv(override=True)
 
@@ -45,4 +46,4 @@ message = client.messages.create(
     max_tokens=1024,
 )
 
-print(message.content)
+print(message)

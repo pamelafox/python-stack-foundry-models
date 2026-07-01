@@ -21,7 +21,7 @@
             "extensions": [
                 "ms-python.python",
                 "ms-azuretools.vscode-bicep",
-                "ms-ossdata.vscode-pgsql"
+                "humao.rest-client"
             ]
         }
     },

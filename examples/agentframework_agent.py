@@ -4,22 +4,22 @@ import random
 from datetime import datetime
 from typing import Annotated
 
+from agent_framework import Agent, tool
+from agent_framework.anthropic import AnthropicClient
+from agent_framework_openai import OpenAIChatClient
 from anthropic import AsyncAnthropic
 from anthropic.lib.credentials import AccessToken
 from azure.identity import AzureDeveloperCliCredential
 from dotenv import load_dotenv
-from agent_framework_openai import OpenAIChatClient
-from agent_framework.anthropic import AnthropicClient
-from agent_framework import Agent, tool
 from pydantic import Field
 
 load_dotenv(override=True)
 
 azure_credential = AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
 
-provider = os.environ.get("MODEL_CHOICE", "claude")
+model_choice = os.environ.get("MODEL_CHOICE", "openai")
 
-if provider == "openai":
+if model_choice == "openai":
 
     client = OpenAIChatClient(
         model=os.environ["FOUNDRY_OPENAI_DEPLOYMENT"],
@@ -27,7 +27,7 @@ if provider == "openai":
         credential=azure_credential,
     )
 
-elif provider == "claude":
+elif model_choice == "claude":
 
     def _entra_credentials_provider(scope: str = "https://ai.azure.com/.default"):
         def _provider(*, force_refresh: bool = False) -> AccessToken:
@@ -86,6 +86,7 @@ agent = Agent(
 
 async def main():
     response = await agent.run("what can I do this weekend in San Francisco?")
+    print(f"Response from {client.model}:\n")
     print(response.text)
 
 

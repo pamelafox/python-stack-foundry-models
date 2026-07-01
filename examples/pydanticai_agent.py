@@ -11,16 +11,16 @@ from azure.identity.aio import get_bearer_token_provider
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIChatModel
-from pydantic_ai.providers.openai import OpenAIProvider
 from pydantic_ai.models.anthropic import AnthropicModel
+from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.anthropic import AnthropicProvider
+from pydantic_ai.providers.openai import OpenAIProvider
 
 load_dotenv(override=True)
 
-provider = os.environ.get("MODEL_CHOICE", "openai")
+model_choice = os.environ.get("MODEL_CHOICE", "claude")
 
-if provider == "openai":
+if model_choice == "openai":
     async_azure_credential = AsyncAzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
     token_provider = get_bearer_token_provider(async_azure_credential, "https://ai.azure.com/.default")
     client = AsyncOpenAI(
@@ -29,7 +29,7 @@ if provider == "openai":
     )
     model = OpenAIChatModel(os.environ["FOUNDRY_OPENAI_DEPLOYMENT"], provider=OpenAIProvider(openai_client=client))
 
-elif provider == "claude":
+elif model_choice == "claude":
     sync_azure_credential = SyncAzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
 
     def anthropic_credentials_provider():
@@ -47,7 +47,7 @@ elif provider == "claude":
         provider=AnthropicProvider(anthropic_client=foundry_client),
     )
 else:
-    raise ValueError(f"Unsupported MODEL_CHOICE: {provider}")
+    raise ValueError(f"Unsupported MODEL_CHOICE: {model_choice}")
 
 
 def get_weather(city: str) -> dict:
@@ -83,6 +83,7 @@ agent = Agent(
 
 async def main():
     result = await agent.run("what can I do this weekend in San Francisco?")
+    print(f"Response from {model.model_name}:\n")
     print(result.output)
 
 
