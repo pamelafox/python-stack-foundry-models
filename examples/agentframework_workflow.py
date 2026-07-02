@@ -25,7 +25,7 @@ def _entra_credentials_provider(scope: str = "https://ai.azure.com/.default"):
     return _provider
 
 
-provider = os.environ.get("MODEL_CHOICE", "claude")
+provider = os.environ.get("MODEL_CHOICE", "openai")
 if provider == "openai":
     client = OpenAIChatClient(
         model=os.environ["FOUNDRY_OPENAI_DEPLOYMENT"],

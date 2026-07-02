@@ -18,7 +18,7 @@ from pydantic_ai.providers.openai import OpenAIProvider
 
 load_dotenv(override=True)
 
-model_choice = os.environ.get("MODEL_CHOICE", "claude")
+model_choice = os.environ.get("MODEL_CHOICE", "openai")
 
 if model_choice == "openai":
     async_azure_credential = AsyncAzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])

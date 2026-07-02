@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore", message="Pydantic serializer warnings:*")
 
 azure_credential = AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"])
 
-provider = os.environ.get("MODEL_CHOICE", "claude")
+provider = os.environ.get("MODEL_CHOICE", "openai")
 
 
 class ReviewResult(BaseModel):
