@@ -15,14 +15,14 @@ azure_token_provider = get_bearer_token_provider(
 
 router = LMRouter(
     RouterConfig(
-        api_keys={"azure": lambda: BearerToken(azure_token_provider())},
-        settings={"azure": {"resource": os.environ["FOUNDRY_ACCOUNT_NAME"]}},
+        api_keys={"openai": lambda: BearerToken(azure_token_provider())},
+        base_urls={"openai": os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"},
     )
 )
 
 response = router.complete(
     Request(
-        model=f"azure:{os.environ['FOUNDRY_OPENAI_DEPLOYMENT']}",
+        model=f"openai:{os.environ['FOUNDRY_OPENAI_DEPLOYMENT']}",
         messages=(Message.user("What is the capital of France?"),),
     )
 )

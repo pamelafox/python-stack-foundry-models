@@ -123,7 +123,7 @@ You can run the examples in this repository by executing the scripts in the `exa
 | ------- | ----------- |
 | [openai_responses.py](examples/openai_responses.py) | Calling a Foundry-hosted OpenAI model using the OpenAI Python SDK (Responses API). |
 | [lm15_request.py](examples/lm15_request.py) | Calling a Foundry-hosted OpenAI model using the typed, provider-neutral lm15 interface. |
-| [lm15_azure_route.py](examples/lm15_azure_route.py) | Calling a Foundry-hosted OpenAI model using lm15's `azure:` route with an Azure Identity token provider. |
+| [lm15_router.py](examples/lm15_router.py) | Calling a Foundry-hosted OpenAI model through lm15's multi-provider router. |
 | [anthropic_messages.py](examples/anthropic_messages.py) | Calling a Foundry-hosted Claude model using the Anthropic Python SDK (Messages API). |
 | [litellm_swap.py](examples/litellm_swap.py) | Calling either OpenAI or Claude models via LiteLLM, a unified interface that abstracts provider differences. |
 | [pydanticai_agent.py](examples/pydanticai_agent.py) | Building an agent with tools using PydanticAI, configured for either OpenAI or Claude on Foundry. |
