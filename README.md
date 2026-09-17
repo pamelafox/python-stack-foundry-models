@@ -122,11 +122,22 @@ You can run the examples in this repository by executing the scripts in the `exa
 | Example | Description |
 | ------- | ----------- |
 | [openai_responses.py](examples/openai_responses.py) | Calling a Foundry-hosted OpenAI model using the OpenAI Python SDK (Responses API). |
+| [lm15_request.py](examples/lm15_request.py) | Calling a Foundry-hosted OpenAI model using the typed, provider-neutral lm15 interface. |
+| [lm15_azure_route.py](examples/lm15_azure_route.py) | Calling a Foundry-hosted OpenAI model using lm15's `azure:` route with an Azure Identity token provider. |
 | [anthropic_messages.py](examples/anthropic_messages.py) | Calling a Foundry-hosted Claude model using the Anthropic Python SDK (Messages API). |
 | [litellm_swap.py](examples/litellm_swap.py) | Calling either OpenAI or Claude models via LiteLLM, a unified interface that abstracts provider differences. |
 | [pydanticai_agent.py](examples/pydanticai_agent.py) | Building an agent with tools using PydanticAI, configured for either OpenAI or Claude on Foundry. |
 | [langchain_agent.py](examples/langchain_agent.py) | Building an agent with tools using LangChain, configured for either OpenAI or Claude on Foundry. |
 | [agentframework_agent.py](examples/agentframework_agent.py) | Building an agent with tools using Microsoft Agent Framework, configured for either OpenAI or Claude on Foundry. |
+
+### lm15 approaches
+
+The two lm15 examples demonstrate different levels of abstraction:
+
+* [lm15_request.py](examples/lm15_request.py) constructs a single `OpenAILM` directly. The application explicitly provides the Foundry endpoint, deployment name, and credential provider. This is the simpler approach when the application uses one known provider.
+* [lm15_azure_route.py](examples/lm15_azure_route.py) uses `LMRouter` and an `azure:` model prefix. lm15 selects the OpenAI Responses adapter, constructs the Azure endpoint from the resource name, and removes the prefix before sending the deployment name. This approach is useful when an application routes requests across multiple providers.
+
+Both examples explicitly use Azure Identity's `get_bearer_token_provider` rather than lm15's built-in Azure credential chain. Implicit credential chains are convenient for local experimentation, but they can select different identities in different environments and make authentication failures difficult to diagnose. Production applications should select an appropriate credential intentionally, such as `ManagedIdentityCredential` or `WorkloadIdentityCredential`. These local samples use `AzureDeveloperCliCredential` because the repository authenticates developers through `azd`.
 
 Run any example with:
 
@@ -139,6 +150,7 @@ uv run examples/<example_name>.py
 * [Microsoft Foundry Documentation](https://learn.microsoft.com/azure/ai-foundry/)
 * [Agent Framework Documentation](https://learn.microsoft.com/agent-framework/)
 * [OpenAI Python SDK](https://github.com/openai/openai-python)
+* [lm15](https://lm15-dev.github.io/lm15-python/)
 * [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python)
 * [LiteLLM](https://github.com/BerriAI/litellm)
 * [PydanticAI](https://ai.pydantic.dev/)
