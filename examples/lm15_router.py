@@ -1,5 +1,4 @@
 import os
-from urllib.parse import urlparse
 
 from azure.identity import AzureDeveloperCliCredential, get_bearer_token_provider
 from dotenv import load_dotenv
@@ -13,14 +12,6 @@ azure_token_provider = get_bearer_token_provider(
     AzureDeveloperCliCredential(tenant_id=os.environ["AZURE_TENANT_ID"]),
     "https://ai.azure.com/.default",
 )
-
-
-def foundry_resource_from_endpoint(endpoint: str) -> str:
-    host = urlparse(endpoint).hostname or ""
-    suffix = ".services.ai.azure.com"
-    if not host.endswith(suffix):
-        raise ValueError(f"FOUNDRY_MODELS_ENDPOINT must end with {suffix!r}: {endpoint}")
-    return host.removesuffix(suffix)
 
 
 model_choice = os.environ.get("MODEL_CHOICE", "openai")
@@ -42,7 +33,7 @@ router = LMRouter(
         },
         settings={
             "azure-anthropic": {
-                "resource": foundry_resource_from_endpoint(os.environ["FOUNDRY_MODELS_ENDPOINT"]),
+                "resource": os.environ["FOUNDRY_RESOURCE_NAME"],
             },
         },
     )
