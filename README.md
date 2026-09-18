@@ -122,6 +122,8 @@ You can run the examples in this repository by executing the scripts in the `exa
 | Example | Description |
 | ------- | ----------- |
 | [openai_responses.py](examples/openai_responses.py) | Calling a Foundry-hosted OpenAI model using the OpenAI Python SDK (Responses API). |
+| [lm15_request.py](examples/lm15_request.py) | Calling a Foundry-hosted OpenAI model using the typed, provider-neutral lm15 interface. |
+| [lm15_router.py](examples/lm15_router.py) | Calling a Foundry-hosted OpenAI model through lm15's multi-provider router. |
 | [anthropic_messages.py](examples/anthropic_messages.py) | Calling a Foundry-hosted Claude model using the Anthropic Python SDK (Messages API). |
 | [litellm_swap.py](examples/litellm_swap.py) | Calling either OpenAI or Claude models via LiteLLM, a unified interface that abstracts provider differences. |
 | [pydanticai_agent.py](examples/pydanticai_agent.py) | Building an agent with tools using PydanticAI, configured for either OpenAI or Claude on Foundry. |
@@ -139,6 +141,7 @@ uv run examples/<example_name>.py
 * [Microsoft Foundry Documentation](https://learn.microsoft.com/azure/ai-foundry/)
 * [Agent Framework Documentation](https://learn.microsoft.com/agent-framework/)
 * [OpenAI Python SDK](https://github.com/openai/openai-python)
+* [lm15](https://lm15-dev.github.io/lm15-python/)
 * [Anthropic Python SDK](https://github.com/anthropics/anthropic-sdk-python)
 * [LiteLLM](https://github.com/BerriAI/litellm)
 * [PydanticAI](https://ai.pydantic.dev/)

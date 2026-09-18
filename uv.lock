@@ -2171,6 +2171,15 @@ wheels = [
 ]
 
 [[package]]
+name = "lm15"
+version = "1.0.0rc1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/5f/0b3f9243ca7aabf4bd03932cad23ee20061516e63f5a422af9217b819f5a/lm15-1.0.0rc1.tar.gz", hash = "sha256:a78a26dbb53c1cb43052ef9a28934ce5701b47dd195b660dbaee517823d1a4a1", size = 464461, upload-time = "2026-09-11T19:30:50.55Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6a/b0/6bec972e4257f4deed0ba1040f68f355b82ea884b8936ac071e2cd4a35e2/lm15-1.0.0rc1-py3-none-any.whl", hash = "sha256:09acfad118f3f3e4b02eb0b2221adaef774b3d06dfed7caa9f9af8b774a1dc82", size = 326549, upload-time = "2026-09-11T19:30:49.048Z" },
+]
+
+[[package]]
 name = "logfire"
 version = "4.36.0"
 source = { registry = "https://pypi.org/simple" }
@@ -3854,6 +3863,7 @@ dependencies = [
     { name = "langchain-azure-ai" },
     { name = "langgraph" },
     { name = "litellm" },
+    { name = "lm15" },
     { name = "openai" },
     { name = "opentelemetry-exporter-otlp-proto-grpc" },
     { name = "pydantic" },
@@ -3879,6 +3889,7 @@ requires-dist = [
     { name = "langchain-azure-ai" },
     { name = "langgraph" },
     { name = "litellm" },
+    { name = "lm15", specifier = "==1.0.0rc1" },
     { name = "openai", specifier = ">=1.109.1" },
     { name = "opentelemetry-exporter-otlp-proto-grpc" },
     { name = "pydantic" },
