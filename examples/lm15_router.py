@@ -13,16 +13,35 @@ azure_token_provider = get_bearer_token_provider(
     "https://ai.azure.com/.default",
 )
 
+
+model_choice = os.environ.get("MODEL_CHOICE", "openai")
+if model_choice == "openai":
+    model = f"openai:{os.environ['FOUNDRY_OPENAI_DEPLOYMENT']}"
+elif model_choice == "claude":
+    model = f"azure-anthropic:{os.environ['FOUNDRY_CLAUDE_DEPLOYMENT']}"
+else:
+    raise ValueError(f"Unsupported MODEL_CHOICE: {model_choice}")
+
 router = LMRouter(
     RouterConfig(
-        api_keys={"openai": lambda: BearerToken(azure_token_provider())},
-        base_urls={"openai": os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1"},
+        api_keys={
+            "openai": lambda: BearerToken(azure_token_provider()),
+            "azure-anthropic": lambda: BearerToken(azure_token_provider()),
+        },
+        base_urls={
+            "openai": os.environ["FOUNDRY_MODELS_ENDPOINT"] + "/openai/v1",
+        },
+        settings={
+            "azure-anthropic": {
+                "resource": os.environ["FOUNDRY_RESOURCE_NAME"],
+            },
+        },
     )
 )
 
 response = router.complete(
     Request(
-        model=f"openai:{os.environ['FOUNDRY_OPENAI_DEPLOYMENT']}",
+        model=model,
         messages=(Message.user("What is the capital of France?"),),
     )
 )

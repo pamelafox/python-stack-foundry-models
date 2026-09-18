@@ -125,6 +125,7 @@ output APPLICATIONINSIGHTS_CONNECTION_STRING string = appInsights.outputs.connec
 // Specific to Microsoft Foundry
 output FOUNDRY_PROJECT_ENDPOINT string = foundry.outputs.foundryProjectEndpoint
 output FOUNDRY_ACCOUNT_NAME string = foundry.outputs.foundryAccountName
+output FOUNDRY_RESOURCE_NAME string = foundry.outputs.foundryAccountName
 
 // Specific to model deployments
 output FOUNDRY_MODELS_ENDPOINT string = foundry.outputs.modelsEndpoint

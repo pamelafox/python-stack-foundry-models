@@ -31,6 +31,7 @@ function Get-FirstArrayValue {
 }
 
 $azureTenantId = Get-AzdValue "AZURE_TENANT_ID"
+$foundryResourceName = Get-AzdValue "FOUNDRY_RESOURCE_NAME"
 $foundryModelsEndpoint = Get-AzdValue "FOUNDRY_MODELS_ENDPOINT"
 $foundryOpenAiDeployment = Get-AzdValue "FOUNDRY_OPENAI_DEPLOYMENT"
 if ([string]::IsNullOrWhiteSpace($foundryOpenAiDeployment)) {
@@ -49,6 +50,7 @@ if ([string]::IsNullOrWhiteSpace($foundryClaudeDeployment)) {
 $envLines = @(
 	"AZURE_TENANT_ID=$azureTenantId",
 	"",
+	"FOUNDRY_RESOURCE_NAME=$foundryResourceName",
 	"FOUNDRY_MODELS_ENDPOINT=$foundryModelsEndpoint",
 	"FOUNDRY_OPENAI_DEPLOYMENT=$foundryOpenAiDeployment",
 	"FOUNDRY_CLAUDE_DEPLOYMENT=$foundryClaudeDeployment"

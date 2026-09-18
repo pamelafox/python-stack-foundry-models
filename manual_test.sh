@@ -11,9 +11,13 @@ run_test() {
 }
 
 run_test uv run examples/openai_responses.py
-run_test uv run examples/lm15_request.py
-run_test uv run examples/lm15_router.py
 run_test uv run examples/anthropic_messages.py
+
+run_test env MODEL_CHOICE=openai uv run examples/lm15_request.py
+run_test env MODEL_CHOICE=claude uv run examples/lm15_request.py
+
+run_test env MODEL_CHOICE=openai uv run examples/lm15_router.py
+run_test env MODEL_CHOICE=claude uv run examples/lm15_router.py
 
 run_test env MODEL_CHOICE=openai uv run examples/agentframework_agent.py
 run_test env MODEL_CHOICE=claude uv run examples/agentframework_agent.py
